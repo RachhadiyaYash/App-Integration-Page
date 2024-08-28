@@ -1,50 +1,66 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useState, useEffect } from "react";
+import AppCard from "./Components/Appcard";
+import Categorybuttons from "./Components/Categorybuttons"; // Ensure correct case and relative path
+import Searchbar from "./Components/Searchbar";
+import { Carddata } from "./Carddata";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const [selectedCategory, setSelectedCategory] = useState("All Apps");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [highlightedCardId, setHighlightedCardId] = useState(null);
+
+  useEffect(() => {
+    const storedCardId = localStorage.getItem("highlightedCardId");
+    if (storedCardId) {
+      setHighlightedCardId(Number(storedCardId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (highlightedCardId !== null) {
+      localStorage.setItem("highlightedCardId", highlightedCardId);
+    }
+  }, [highlightedCardId]);
+
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const filteredCards = Carddata.filter(
+    (card) =>
+      (selectedCategory === "All Apps" ||
+        card.appCategory === selectedCategory) &&
+      card.companyName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const handleCardClick = (id) => {
+    setHighlightedCardId(id);
+  };
 
   return (
-    <>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla velit
-        corporis, sequi asperiores eius error natus nobis ab dolorum.
-        Repellendus officia vitae culpa illum deserunt, et ut nulla alias
-        provident quos rerum! Eos inventore ipsa mollitia sunt illo, quia nam
-        quas. Esse provident, neque nisi ullam, perspiciatis ea id corporis quas
-        veritatis maxime, voluptatum magni ipsa rerum! Quo omnis quis
-        praesentium illo porro mollitia quae reiciendis maxime atque facere!
-        Ullam, aspernatur quod. At ipsam aspernatur natus tempore? Voluptatum
-        repellat reiciendis dolorum, at omnis fugit exercitationem. Ipsam
-        delectus, ullam assumenda error ex neque libero? Ratione assumenda ipsum
-        ex consectetur, at tenetur dolorem quis doloribus vel ducimus tempore
-        beatae laborum, laboriosam architecto repellendus atque, dolores ab
-        sint! Quibusdam, officiis error consectetur nemo tempore expedita
-        inventore quas nulla amet fugiat eos est iste rerum impedit laboriosam
-        maiores provident tenetur asperiores neque nihil ad ducimus, eius itaque
-        dicta. Molestiae nulla nam odit reprehenderit, distinctio, doloremque
-        eligendi modi doloribus laboriosam tenetur adipisci quibusdam error
-        voluptatem. Ratione ipsum animi quisquam? Eos praesentium incidunt hic
-        voluptates delectus ducimus. Provident veritatis alias optio nisi odit
-        impedit ab error harum quibusdam dolores. Et assumenda perferendis
-        voluptatibus eveniet rem blanditiis inventore ipsum nihil debitis, unde
-        veritatis quo voluptates, mollitia animi quasi ab fugiat esse illum
-        quisquam voluptas quia error ea? Quisquam culpa incidunt maxime eos
-        veniam adipisci commodi animi, unde ipsam minus voluptates, ut assumenda
-        voluptate accusantium possimus similique eius hic blanditiis eaque ea,
-        placeat quia reiciendis voluptatem modi. Debitis cum aperiam maiores
-        molestiae officiis illum praesentium quidem consequatur doloremque sit,
-        id laudantium. Cum totam ullam autem a illo numquam rem assumenda dolore
-        nesciunt. Quaerat sit non facere, rem veritatis, ipsam soluta suscipit
-        impedit recusandae qui nemo dignissimos molestias pariatur, temporibus
-        officiis sint error veniam consequuntur excepturi voluptatum perferendis
-        tempora! Numquam, reprehenderit facilis. Praesentium, expedita provident
-        omnis reiciendis doloribus laboriosam!
-      </p>
-    </>
+    <div className="container mx-auto px-4  mt-2 mb-4">
+      <Searchbar onSearch={handleSearch} />
+      <Categorybuttons onCategoryChange={handleCategoryChange} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        {filteredCards.map((card) => (
+          <div
+            key={card.id}
+            onClick={() => handleCardClick(card.id)}
+            className={`cursor-pointer border-gray-300 `}
+          >
+            <AppCard
+              imageUrl={card.imageUrl}
+              companyName={card.companyName}
+              description={card.description}
+              isActive={highlightedCardId === card.id}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
-
-export default App;
