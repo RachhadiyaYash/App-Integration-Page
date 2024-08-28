@@ -86,7 +86,7 @@ export const Carddata = [
     },
     {
         id: 13,
-        imageUrl: '/App-Integration-page/public/google-drive-svgrepo-com.svg',
+        imageUrl: '/App-Integration-page/google-drive-svgrepo-com.svg',
         companyName: 'Google Drive',
         appCategory: 'File Management',
         description: 'Lorem ipsum dolor, sit amet consectetur adipisicing elit.Atque aliquid provident necessitatibus vero, nobis in quis eos explicabo eveniet distinctio?',
