@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./AppCard.css";
+import "./Appcard.css";
 export default function AppCard({
   imageUrl,
   companyName,
