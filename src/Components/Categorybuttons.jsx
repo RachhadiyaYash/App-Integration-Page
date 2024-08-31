@@ -5,9 +5,9 @@ export default function Categorybuttons({ onCategoryChange }) {
 
   const categories = [
     "All Apps",
-    "Mails","Publicity
+    "Mails","Publicity",
     "Communication",
-    ",
+   
     "Finance",
     "File Management",
   ];
